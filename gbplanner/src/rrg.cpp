@@ -43,6 +43,10 @@ Rrg::Rrg(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private)
 
   free_cloud_pub_ =
       nh_.advertise<sensor_msgs::PointCloud2>("freespace_pointcloud", 10);
+	compute_time_pub_ = 
+			nh_.advertise<std_msgs::Float64>("compute_time_out", 10);
+	n_vol_gain_fun_calls_pub_ =
+			nh_.advertise<std_msgs::Float64>("n_vol_gain_fun_calls", 10);
 
   //
   global_graph_update_timer_ =
@@ -709,6 +713,14 @@ Rrg::GraphStatus Rrg::evaluateGraph() {
   }
   stat_->evaluate_graph_time = GET_ELAPSED_TIME(ttime);
   stat_->printTime();
+
+	std_msgs::Float64 compute_time_msg;
+	compute_time_msg.data = stat_->total_time;
+	compute_time_pub_.publish(compute_time_msg);
+
+	compute_time_msg.data = n_vol_gain_fun_calls_;
+	n_vol_gain_fun_calls_pub_.publish(compute_time_msg);
+
   return gstatus;
 }
 
@@ -1593,6 +1605,8 @@ void Rrg::computeExplorationGain(bool only_leaf_vertices) {
 
 void Rrg::computeVolumetricGain(StateVec& state, VolumetricGain& vgain,
                                 bool vis_en) {
+	n_vol_gain_fun_calls_++;
+
   vgain.reset();
   double step_size = planning_params_.exp_gain_voxel_size;
   // Scan winthin a local space and sensor range.
@@ -1714,6 +1728,8 @@ void Rrg::computeVolumetricGain(StateVec& state, VolumetricGain& vgain,
 
 void Rrg::computeVolumetricGainRayModel(StateVec& state, VolumetricGain& vgain,
                                         bool vis_en) {
+
+	n_vol_gain_fun_calls_++;
   vgain.reset();
 
   // Scan winthin a local space and sensor range.
@@ -1850,6 +1866,9 @@ void Rrg::computeVolumetricGainRayModel(StateVec& state, VolumetricGain& vgain,
 
 void Rrg::computeVolumetricGainRayModelNoBound(StateVec& state,
                                                VolumetricGain& vgain) {
+
+	n_vol_gain_fun_calls_++;
+
   vgain.reset();
 
   // Scan winthin a GLOBAL space and sensor range.

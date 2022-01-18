@@ -8,6 +8,7 @@
 
 #include <geometry_msgs/Polygon.h>
 #include <geometry_msgs/PolygonStamped.h>
+#include <std_msgs/Float64.h>
 #include <kdtree/kdtree.h>
 
 #include "gbplanner/gbplanner_rviz.h"
@@ -384,7 +385,10 @@ class Rrg {
   /* This is a hacky way to augment a free PCL to the map to clear out free
    * space for planning in special cases like vertical exploration.
    */
+	int n_vol_gain_fun_calls_ = 0;
   ros::Publisher free_cloud_pub_;
+	ros::Publisher compute_time_pub_;
+	ros::Publisher n_vol_gain_fun_calls_pub_;
   const double kFreePointCloudUpdatePeriod = 0.5;
   ros::Timer free_pointcloud_update_timer_;
 };
