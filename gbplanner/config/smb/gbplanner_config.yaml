@@ -29,6 +29,7 @@ SensorParams:
     rotations:      [0.0, 0.0, 0.0]
     fov:            [rad(2.0*pi), rad(pi/6)]
     resolution:     [rad(5.0*pi/180), rad(5.0*pi/180)]
+    #resolution:     [rad(1.0*pi/180), rad(1.0*pi/180)]
     frontier_percentage_threshold: 0.05
 #-------------------------------------------------------------------------------
 # SAMPLING SPACE CONFIGURATION
@@ -38,10 +39,10 @@ SensorParams:
 BoundedSpaceParams:
   Global:
     type:           kCuboid
-    min_val:        [-0, -2, -100000]
-    max_val:        [53, 15, 100000]
-    #min_val:        [-10000.0, -10000.0, -30.0]
-    #max_val:        [10000.0, 5.0, 30.0]
+    #min_val:        [-0, -2, -100000]
+    #max_val:        [53, 15, 100000]
+    min_val:        [-10000.0, -10000.0, -30.0]
+    max_val:        [10000.0, 2.0, 30.0]
   Local:
     type:           kCuboid
     min_val:        [-15.0, -15.0, -3.0]
